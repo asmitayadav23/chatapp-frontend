@@ -8,19 +8,29 @@ const RenderAttachment = (fileType, url) => {
     case "video":
       return (
         <Box sx={{ width: "100%", height: "auto" }}>
-          <video src={url} preload="none" width="100%" height="auto" controls />
+          <video
+            src={url}
+            preload="none"
+            width="100%"
+            height="auto"
+            controls
+            style={{ borderRadius: "8px" }}
+          />
         </Box>
       );
 
     case "image":
       return (
-        <Box sx={{ width: "200px", height: "150px", overflow: "hidden" }}>
+        <Box sx={{ width: "100%", height: "auto" }}>
           <img
-            src={transformImage(url, 200)}
+            src={url} // ⚡ use direct Cloudinary secure URL, not transformImage here
             alt="Attachment"
-            width="100%"
-            height="100%"
-            style={{ objectFit: "contain", borderRadius: "8px" }}
+            style={{
+              width: "200px",
+              height: "150px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
           />
         </Box>
       );
