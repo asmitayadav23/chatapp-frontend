@@ -73,12 +73,21 @@ const api = createApi({
     }),
 
     sendAttachments: builder.mutation({
-      query: (data) => ({
-        url: "chat/message",
-        method: "POST",
-        credentials: "include",
-        body: data,
-      }),
+      query: ({ chatId, files }) => {
+        const formData = new FormData();
+        formData.append("chatId", chatId);
+
+        files.forEach((file) => {
+          formData.append("files", file);
+        });
+
+        return {
+          url: "chat/send-attachments", // ✨ updated
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        };
+      },
     }),
 
     myGroups: builder.query({
