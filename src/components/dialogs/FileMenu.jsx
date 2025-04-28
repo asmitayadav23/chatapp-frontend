@@ -13,7 +13,6 @@ import { useSendAttachmentsMutation } from "../../redux/api/api";
 
 const FileMenu = ({ anchorE1, chatId }) => {
   const { isFileMenu } = useSelector((state) => state.misc);
-
   const dispatch = useDispatch();
 
   const imageRef = useRef(null);
@@ -33,8 +32,14 @@ const FileMenu = ({ anchorE1, chatId }) => {
   const fileChangeHandler = async (e, key) => {
     const files = Array.from(e.target.files);
 
-    if (files.length <= 0) return;
+    if (!chatId) {
+      toast.error("Chat ID is missing! Cannot send file.");
+      return;
+    }
 
+    console.log("Uploading with Chat ID:", chatId); // ✅ Debugging
+
+    if (files.length <= 0) return;
     if (files.length > 5)
       return toast.error(`You can only send 5 ${key} at a time`);
 
@@ -45,18 +50,20 @@ const FileMenu = ({ anchorE1, chatId }) => {
 
     try {
       const myForm = new FormData();
-
       myForm.append("chatId", chatId);
+
       files.forEach((file) => myForm.append("files", file));
 
-      const res = await sendAttachments(myForm);
+      const res = await sendAttachments(myForm).unwrap();
 
-      if (res.data) toast.success(`${key} sent successfully`, { id: toastId });
-      else toast.error(`Failed to send ${key}`, { id: toastId });
+      if (res.success)
+        toast.success(`${key} sent successfully`, { id: toastId });
+      else
+        toast.error(`Failed to send ${key}`, { id: toastId });
 
-      // Fetching Here
     } catch (error) {
-      toast.error(error, { id: toastId });
+      console.error("Error sending attachments:", error);
+      toast.error("Failed to send files", { id: toastId });
     } finally {
       dispatch(setUploadingLoader(false));
     }
@@ -64,11 +71,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
 
   return (
     <Menu anchorEl={anchorE1} open={isFileMenu} onClose={closeFileMenu}>
-      <div
-        style={{
-          width: "10rem",
-        }}
-      >
+      <div style={{ width: "10rem" }}>
         <MenuList>
           <MenuItem onClick={selectImage}>
             <Tooltip title="Image">
