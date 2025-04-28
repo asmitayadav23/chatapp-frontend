@@ -37,6 +37,11 @@ const FileMenu = ({ anchorE1, chatId }) => {
       return;
     }
 
+    if (!chatId || chatId.length !== 24) {
+      toast.error("Invalid chat selected. Please select a valid chat.");
+      return;
+    }
+  
     console.log("Uploading with Chat ID:", chatId); // ✅ Debugging
 
     if (files.length <= 0) return;
