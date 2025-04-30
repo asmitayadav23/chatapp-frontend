@@ -20,17 +20,17 @@ const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
 const UserManagement = lazy(() => import("./pages/admin/UserManagement"));
 const ChatManagement = lazy(() => import("./pages/admin/ChatManagement"));
-const MessagesManagement = lazy(() =>
-  import("./pages/admin/MessageManagement")
-);
+const MessagesManagement = lazy(() => import("./pages/admin/MessageManagement"));
+const AdminChatbot = lazy(() => import("./pages/admin/AdminChatbot"));
 
-// ✅ Import AdminLayout (you missed this)
+// ✅ Admin Layout
 import AdminLayout from "./components/layout/AdminLayout";
 
 const App = () => {
   const { user, loader } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  // ✅ Fetch user on app load
   useEffect(() => {
     axios
       .get(`${server}/api/v1/user/me`, { withCredentials: true })
@@ -38,17 +38,18 @@ const App = () => {
       .catch(() => dispatch(userNotExists()));
   }, [dispatch]);
 
-  return loader ? (
-    <LayoutLoader />
-  ) : (
+  // ✅ Block rendering until user data is loaded
+  if (loader) return <LayoutLoader />;
+
+  return (
     <BrowserRouter>
       <Suspense fallback={<LayoutLoader />}>
         <Routes>
-          {/* User-Protected Routes */}
+          {/* ✅ User-Protected Routes */}
           <Route
             element={
               <SocketProvider>
-                <ProtectRoute user={user} />
+                <ProtectRoute user={user} redirect="/login" />
               </SocketProvider>
             }
           >
@@ -57,7 +58,7 @@ const App = () => {
             <Route path="/groups" element={<Groups />} />
           </Route>
 
-          {/* Guest-Protected Login */}
+          {/* ✅ Guest-only Login */}
           <Route
             path="/login"
             element={
@@ -70,7 +71,7 @@ const App = () => {
           {/* ✅ Admin Login (Public) */}
           <Route path="/admin" element={<AdminLogin />} />
 
-          {/* ✅ Admin Protected Layout */}
+          {/* ✅ Admin-Protected Routes */}
           <Route
             path="/admin"
             element={
@@ -83,9 +84,10 @@ const App = () => {
             <Route path="users" element={<UserManagement />} />
             <Route path="chats" element={<ChatManagement />} />
             <Route path="messages" element={<MessagesManagement />} />
+            <Route path="chatbot" element={<AdminChatbot />} />
           </Route>
 
-          {/* Catch-all */}
+          {/* ✅ 404 Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
