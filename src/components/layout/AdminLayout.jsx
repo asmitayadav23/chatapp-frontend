@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Close as CloseIcon,
   Dashboard as DashboardIcon,
@@ -16,11 +17,11 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { useState } from "react";
 import { Link as LinkComponent, Navigate, useLocation } from "react-router-dom";
 import { grayColor, matBlack } from "../../constants/color";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLogout } from "../../redux/thunks/admin";
+import ChatBot from "../shared/ChatBot"; // ✅ Adjust path if needed
 
 const Link = styled(LinkComponent)`
   text-decoration: none;
@@ -64,12 +65,12 @@ const Sidebar = ({ w = "100%" }) => {
   };
 
   return (
-    <Stack width={w} direction={"column"} p={"3rem"} spacing={"3rem"}>
-      <Typography variant="h5" textTransform={"uppercase"}>
+    <Stack width={w} direction="column" p="3rem" spacing="3rem">
+      <Typography variant="h5" textTransform="uppercase">
         WhatsViz
       </Typography>
 
-      <Stack spacing={"1rem"}>
+      <Stack spacing="1rem">
         {adminTabs.map((tab) => (
           <Link
             key={tab.path}
@@ -82,18 +83,16 @@ const Sidebar = ({ w = "100%" }) => {
               }
             }
           >
-            <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
+            <Stack direction="row" alignItems="center" spacing="1rem">
               {tab.icon}
-
               <Typography>{tab.name}</Typography>
             </Stack>
           </Link>
         ))}
 
         <Link onClick={logoutHandler}>
-          <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
+          <Stack direction="row" alignItems="center" spacing="1rem">
             <ExitToAppIcon />
-
             <Typography>Logout</Typography>
           </Stack>
         </Link>
@@ -104,17 +103,16 @@ const Sidebar = ({ w = "100%" }) => {
 
 const AdminLayout = ({ children }) => {
   const { isAdmin } = useSelector((state) => state.auth);
-
   const [isMobile, setIsMobile] = useState(false);
 
   const handleMobile = () => setIsMobile(!isMobile);
-
   const handleClose = () => setIsMobile(false);
 
   if (!isAdmin) return <Navigate to="/admin" />;
 
   return (
-    <Grid container minHeight={"100vh"}>
+    <Grid container minHeight="100vh">
+      {/* Mobile menu toggle */}
       <Box
         sx={{
           display: { xs: "block", md: "none" },
@@ -128,10 +126,12 @@ const AdminLayout = ({ children }) => {
         </IconButton>
       </Box>
 
+      {/* Sidebar */}
       <Grid item md={4} lg={3} sx={{ display: { xs: "none", md: "block" } }}>
         <Sidebar />
       </Grid>
 
+      {/* Main content */}
       <Grid
         item
         xs={12}
@@ -139,11 +139,14 @@ const AdminLayout = ({ children }) => {
         lg={9}
         sx={{
           bgcolor: grayColor,
+          position: "relative",
         }}
       >
         {children}
+        <ChatBot />
       </Grid>
 
+      {/* Drawer for small screens */}
       <Drawer open={isMobile} onClose={handleClose}>
         <Sidebar w="50vw" />
       </Drawer>
