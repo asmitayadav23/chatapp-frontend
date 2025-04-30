@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useFetchData } from "6pp";
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
@@ -13,9 +14,10 @@ import {
   Skeleton,
   Stack,
   Typography,
+  TextField,
+  Button,
 } from "@mui/material";
 import moment from "moment";
-import React from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { DoughnutChart, LineChart } from "../../components/specific/Charts";
 import {
@@ -25,45 +27,70 @@ import {
 import { matBlack } from "../../constants/color";
 import { server } from "../../constants/config";
 import { useErrors } from "../../hooks/hook";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [key, setKey] = useState("");
+
+  const checkKey = () => {
+    if (key === "your-secure-key") {
+      setIsAuthorized(true);
+    } else {
+      alert("Invalid key");
+    }
+  };
+
+  if (!isAuthorized) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h5" gutterBottom>
+          Enter Admin Security Key
+        </Typography>
+        <TextField
+          type="password"
+          label="Security Key"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          sx={{ mb: 2, width: "300px" }}
+        />
+        <Button variant="contained" onClick={checkKey}>
+          Submit
+        </Button>
+      </Box>
+    );
+  }
+
   const { loading, data, error } = useFetchData(
     `${server}/api/v1/admin/stats`,
     "dashboard-stats"
   );
-
   const { stats } = data || {};
-
-  useErrors([
-    {
-      isError: error,
-      error: error,
-    },
-  ]);
+  useErrors([{ isError: error, error }]);
 
   const Appbar = (
     <Paper
       elevation={3}
       sx={{ padding: "2rem", margin: "2rem 0", borderRadius: "1rem" }}
     >
-      <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
+      <Stack direction="row" alignItems="center" spacing="1rem">
         <AdminPanelSettingsIcon sx={{ fontSize: "3rem" }} />
-
         <SearchField placeholder="Search..." />
-
         <CurveButton>Search</CurveButton>
         <Box flexGrow={1} />
         <Typography
-          display={{
-            xs: "none",
-            lg: "block",
-          }}
-          color={"rgba(0,0,0,0.7)"}
-          textAlign={"center"}
+          display={{ xs: "none", lg: "block" }}
+          color="rgba(0,0,0,0.7)"
+          textAlign="center"
         >
           {moment().format("dddd, D MMMM YYYY")}
         </Typography>
-
         <NotificationsIcon />
       </Stack>
     </Paper>
@@ -71,48 +98,31 @@ const Dashboard = () => {
 
   const Widgets = (
     <Stack
-      direction={{
-        xs: "column",
-        sm: "row",
-      }}
+      direction={{ xs: "column", sm: "row" }}
       spacing="2rem"
       justifyContent="space-between"
-      alignItems={"center"}
-      margin={"2rem 0"}
+      alignItems="center"
+      margin="2rem 0"
     >
-      <Widget title={"Users"} value={stats?.usersCount} Icon={<PersonIcon />} />
-      <Widget
-        title={"Chats"}
-        value={stats?.totalChatsCount}
-        Icon={<GroupIcon />}
-      />
-      <Widget
-        title={"Messages"}
-        value={stats?.messagesCount}
-        Icon={<MessageIcon />}
-      />
+      <Widget title="Users" value={stats?.usersCount} Icon={<PersonIcon />} />
+      <Widget title="Chats" value={stats?.totalChatsCount} Icon={<GroupIcon />} />
+      <Widget title="Messages" value={stats?.messagesCount} Icon={<MessageIcon />} />
     </Stack>
   );
 
   return (
     <AdminLayout>
       {loading ? (
-        <Skeleton height={"100vh"} />
+        <Skeleton height="100vh" />
       ) : (
-        <Container component={"main"}>
+        <Container component="main">
           {Appbar}
 
           <Stack
-            direction={{
-              xs: "column",
-              lg: "row",
-            }}
-            flexWrap={"wrap"}
-            justifyContent={"center"}
-            alignItems={{
-              xs: "center",
-              lg: "stretch",
-            }}
+            direction={{ xs: "column", lg: "row" }}
+            flexWrap="wrap"
+            justifyContent="center"
+            alignItems={{ xs: "center", lg: "stretch" }}
             sx={{ gap: "2rem" }}
           >
             <Paper
@@ -124,17 +134,16 @@ const Dashboard = () => {
                 maxWidth: "45rem",
               }}
             >
-              <Typography margin={"2rem 0"} variant="h4">
+              <Typography margin="2rem 0" variant="h4">
                 Last Messages
               </Typography>
-
               <LineChart value={stats?.messagesChart || []} />
             </Paper>
 
             <Paper
               elevation={3}
               sx={{
-                padding: "1rem ",
+                padding: "1rem",
                 borderRadius: "1rem",
                 display: "flex",
                 justifyContent: "center",
@@ -151,23 +160,28 @@ const Dashboard = () => {
                   stats?.groupsCount || 0,
                 ]}
               />
-
               <Stack
-                position={"absolute"}
-                direction={"row"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                spacing={"0.5rem"}
-                width={"100%"}
-                height={"100%"}
+                position="absolute"
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing="0.5rem"
+                width="100%"
+                height="100%"
               >
-                <GroupIcon /> <Typography>Vs </Typography>
-                <PersonIcon />
+                <GroupIcon /> <Typography>Vs </Typography> <PersonIcon />
               </Stack>
             </Paper>
           </Stack>
 
           {Widgets}
+
+          {/* ✅ Navigation to Chatbot Page */}
+          <Box display="flex" justifyContent="center" marginBottom="2rem">
+            <Link to="/admin/chatbot">
+              <Button variant="outlined">Go to Admin Chatbot</Button>
+            </Link>
+          </Box>
         </Container>
       )}
     </AdminLayout>
@@ -184,7 +198,7 @@ const Widget = ({ title, value, Icon }) => (
       width: "20rem",
     }}
   >
-    <Stack alignItems={"center"} spacing={"1rem"}>
+    <Stack alignItems="center" spacing="1rem">
       <Typography
         sx={{
           color: "rgba(0,0,0,0.7)",
@@ -199,7 +213,7 @@ const Widget = ({ title, value, Icon }) => (
       >
         {value}
       </Typography>
-      <Stack direction={"row"} spacing={"1rem"} alignItems={"center"}>
+      <Stack direction="row" spacing="1rem" alignItems="center">
         {Icon}
         <Typography>{title}</Typography>
       </Stack>
