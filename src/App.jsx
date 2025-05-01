@@ -22,6 +22,7 @@ const ChatManagement = lazy(() => import("./pages/admin/ChatManagement"));
 const MessagesManagement = lazy(() =>
   import("./pages/admin/MessageManagement")
 );
+const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 
 const App = () => {
   const { user, loader } = useSelector((state) => state.auth);
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/chats" element={<ChatManagement />} />
           <Route path="/admin/messages" element={<MessagesManagement />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
