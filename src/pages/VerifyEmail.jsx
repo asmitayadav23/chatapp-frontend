@@ -19,7 +19,9 @@ const VerifyEmail = () => {
     }
 
     axios
-      .get(`${server}/api/v1/user/verify-email?token=${token}&id=${id}`)
+      .get(`${server}/api/v1/user/verify-email?token=${token}&id=${id}`,{
+        withCredentials: true, // ✅ send and receive cookies
+      })
       .then((res) => {
         toast.success(res.data.message || "Email verified successfully!");
         setStatus("success");
@@ -31,6 +33,14 @@ const VerifyEmail = () => {
         setStatus("error");
       });
   }, []);
+  useEffect(() => {
+    if (status === "success") {
+      const timeout = setTimeout(() => {
+        window.location.href = "/login"; // or use navigate()
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [status]);
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>

@@ -14,6 +14,9 @@ const adminLogin = createAsyncThunk("admin/login", async (secretKey) => {
     const { data } = await axios.post(
       `${server}/api/v1/admin/verify`,
       { secretKey },
+      {
+        withCredentials: true, // ✅ include cookies like chattu-token
+      },
       config
     );
 

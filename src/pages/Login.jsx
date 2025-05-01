@@ -56,6 +56,9 @@ const Login = () => {
           username: username.value,
           password: password.value,
         },
+        {
+          withCredentials: true, // ✅ include cookies like chattu-token
+        },
         config
       );
       dispatch(userExists(data.user));
@@ -96,6 +99,9 @@ const Login = () => {
       const { data } = await axios.post(
         `${server}/api/v1/user/new`,
         formData,
+        {
+          withCredentials: true, // ✅ include cookies like chattu-token
+        },
         config
       );
 
