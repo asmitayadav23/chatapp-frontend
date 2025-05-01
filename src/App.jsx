@@ -9,7 +9,6 @@ import { userExists, userNotExists } from "./redux/reducers/auth";
 import { Toaster } from "react-hot-toast";
 import { SocketProvider } from "./socket";
 
-// ✅ Lazy imports
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Chat = lazy(() => import("./pages/Chat"));
@@ -24,18 +23,16 @@ const MessagesManagement = lazy(() =>
   import("./pages/admin/MessageManagement")
 );
 
-// ✅ Import AdminLayout (you missed this)
-import AdminLayout from "./components/layout/AdminLayout";
-
 const App = () => {
   const { user, loader } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     axios
       .get(`${server}/api/v1/user/me`, { withCredentials: true })
       .then(({ data }) => dispatch(userExists(data.user)))
-      .catch(() => dispatch(userNotExists()));
+      .catch((err) => dispatch(userNotExists()));
   }, [dispatch]);
 
   return loader ? (
@@ -44,7 +41,6 @@ const App = () => {
     <BrowserRouter>
       <Suspense fallback={<LayoutLoader />}>
         <Routes>
-          {/* User-Protected Routes */}
           <Route
             element={
               <SocketProvider>
@@ -57,7 +53,6 @@ const App = () => {
             <Route path="/groups" element={<Groups />} />
           </Route>
 
-          {/* Guest-Protected Login */}
           <Route
             path="/login"
             element={
@@ -67,25 +62,12 @@ const App = () => {
             }
           />
 
-          {/* ✅ Admin Login (Public) */}
           <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/users" element={<UserManagement />} />
+          <Route path="/admin/chats" element={<ChatManagement />} />
+          <Route path="/admin/messages" element={<MessagesManagement />} />
 
-          {/* ✅ Admin Protected Layout */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectRoute user={user?.isAdmin} redirect="/admin">
-                <AdminLayout />
-              </ProtectRoute>
-            }
-          >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<UserManagement />} />
-            <Route path="chats" element={<ChatManagement />} />
-            <Route path="messages" element={<MessagesManagement />} />
-          </Route>
-
-          {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
