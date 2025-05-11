@@ -87,33 +87,34 @@ const MessageManagement = () => {
   }, [searchTerm, rows]);
 
   return (
-    <AdminLayout>
-      {isLoading ? (
-        <Skeleton height={"100vh"} />
-      ) : (
-        <div className="p-4">
-          <div className="bg-white p-6 rounded shadow relative min-h-[600px]">
-            {/* Table */}
-            <Table
-              heading={"All Messages"}
-              columns={columns}
-              rows={filteredRows}
-              rowHeight={200}
-            />
+  <AdminLayout>
+    {isLoading ? (
+      <Skeleton height={"100vh"} />
+    ) : (
+      <div className="p-4">
+        <div className="bg-white p-6 rounded shadow relative min-h-[700px] overflow-hidden">
+          {/* Table */}
+          <Table
+            heading={"All Messages"}
+            columns={columns}
+            rows={filteredRows} // ✅ use filteredRows, not rows
+            rowHeight={200}
+          />
 
-            {/* Search box in bottom-right */}
-            <input
-              type="text"
-              placeholder="Search messages..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="absolute bottom-6 right-6 w-96 px-5 py-3 text-lg border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-            />
-          </div>
+          {/* Search box fixed to bottom-right */}
+          <input
+            type="text"
+            placeholder="Search messages..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="absolute bottom-6 right-6 w-96 px-5 py-3 text-lg border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all bg-white z-10"
+          />
         </div>
-      )}
-    </AdminLayout>
-  );
+      </div>
+    )}
+  </AdminLayout>
+);
+
 };
 
 export default MessageManagement;
