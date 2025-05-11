@@ -88,34 +88,33 @@ const MessageManagement = () => {
 
 return (
   <AdminLayout>
-  {isLoading ? (
-    <Skeleton height={"100vh"} />
-  ) : (
-    <div className="p-4">
-          <div className="bg-white p-4 rounded shadow">
-            <div className="relative mb-4">
-              <h2 className="text-2xl font-bold text-center">ALL MESSAGES</h2>
-
+    {isLoading ? (
+      <Skeleton height={"100vh"} />
+    ) : (
+      <div className="p-4">
+        <div className="bg-white p-4 rounded shadow relative">
+          {/* Search box at top-right */}
           <input
             type="text"
-            placeholder="Keyword you want to search"
+            placeholder="Search for keyword"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="absolute right-0 top-0 border px-3 py-2 rounded w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="absolute right-4 top-4 border px-3 py-2 rounded w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          {/* Message Table */}
+          <Table
+            heading={"All Messages"}
+            columns={columns}
+            rows={filteredRows}
+            rowHeight={200}
           />
         </div>
-
-        <Table
-          columns={columns}
-          rows={filteredRows}
-          rowHeight={200}
-        />
       </div>
-    </div>
-  )}
-</AdminLayout>
-
+    )}
+  </AdminLayout>
 );
+
 
 };
 
