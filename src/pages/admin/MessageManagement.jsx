@@ -54,6 +54,8 @@ const MessageManagement = () => {
   const { data, isLoading, error } = useAllMessagesQuery(); // ✅ NEW
   useErrors([{ isError: error, error }]);
   const [rows, setRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredRows, setFilteredRows] = useState([]);
 
   useEffect(() => {
     if (data) {
@@ -71,15 +73,44 @@ const MessageManagement = () => {
     }
   }, [data]);
 
-  return (
-    <AdminLayout>
-      {isLoading ? (
-        <Skeleton height={"100vh"} />
-      ) : (
-        <Table heading={"All Messages"} columns={columns} rows={rows} rowHeight={200} />
-      )}
-    </AdminLayout>
-  );
+  useEffect(() => {
+  if (searchTerm.trim() === "") {
+    setFilteredRows(rows);
+  } else {
+    const lowerKeyword = searchTerm.toLowerCase();
+    const matched = rows.filter((row) =>
+      row.content?.toLowerCase().includes(lowerKeyword)
+    );
+    setFilteredRows(matched);
+  }
+}, [searchTerm, rows]);
+
+
+return (
+  <AdminLayout>
+    {isLoading ? (
+      <Skeleton height={"100vh"} />
+    ) : (
+      <div className="p-4">
+        <input
+          type="text"
+          placeholder="Search messages by keyword"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border px-3 py-2 rounded w-full mb-4"
+        />
+
+        <Table
+          heading={"All Messages"}
+          columns={columns}
+          rows={filteredRows}
+          rowHeight={200}
+        />
+      </div>
+    )}
+  </AdminLayout>
+);
+
 };
 
 export default MessageManagement;
