@@ -92,25 +92,31 @@ const MessageManagement = () => {
       <Skeleton height={"100vh"} />
     ) : (
       <div className="p-4">
-        <div className="bg-white p-6 rounded shadow relative min-h-[700px] overflow-hidden">
-          {/* Table */}
-          <Table
-            heading={"All Messages"}
-            columns={columns}
-            rows={filteredRows} // ✅ use filteredRows, not rows
-            rowHeight={200}
-          />
+  <div className="bg-white p-6 rounded shadow relative" style={{ minHeight: "700px" }}>
+    {/* Heading */}
+    <h2 className="text-2xl font-bold text-center mb-6">ALL MESSAGES</h2>
 
-          {/* Search box fixed to bottom-right */}
-          <input
-            type="text"
-            placeholder="Search messages..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="absolute bottom-6 right-6 w-96 px-5 py-3 text-lg border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all bg-white z-10"
-          />
-        </div>
-      </div>
+    {/* Table */}
+    <div className="pb-24"> {/* give padding bottom to avoid search box overlap */}
+      <Table
+        heading={"All Messages"}
+        columns={columns}
+        rows={filteredRows}
+        rowHeight={200}
+      />
+    </div>
+
+    {/* Search Box */}
+    <input
+      type="text"
+      placeholder="Search messages..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="absolute bottom-6 right-6 w-96 px-5 py-3 text-lg border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white z-20"
+    />
+  </div>
+</div>
+
     )}
   </AdminLayout>
 );
