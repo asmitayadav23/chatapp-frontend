@@ -92,9 +92,9 @@ return (
     <Skeleton height={"100vh"} />
   ) : (
     <div className="p-4">
-      <div className="bg-white p-4 rounded shadow">
-        <div className="relative mb-4">
-          <h2 className="text-2xl font-bold text-center">ALL MESSAGES</h2>
+          <div className="bg-white p-4 rounded shadow">
+            <div className="relative mb-4">
+              <h2 className="text-2xl font-bold text-center">ALL MESSAGES</h2>
 
           <input
             type="text"
