@@ -24,7 +24,7 @@ const adminApi = createApi({
       }),
       providesTags: ["AdminUser"],
     }),
-
+    
     allChats: builder.query({
       query: () => ({
         url: "chats",

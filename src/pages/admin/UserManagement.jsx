@@ -4,6 +4,7 @@ import AdminLayout from "../../components/layout/AdminLayout";
 import Table from "../../components/shared/Table";
 import { transformImage } from "../../lib/features";
 import { useAllUsersQuery } from "../../redux/api/adminApi"; // ✅ NEW IMPORT
+import ActionButtons from "../../components/shared/ActionButtons"; 
 
 const columns = [
   {
@@ -45,6 +46,19 @@ const columns = [
     headerClassName: "table-header",
     width: 200,
   },
+  {
+    field: "actions", // ✅ Add this block
+    headerName: "Actions",
+    headerClassName: "table-header",
+    width: 300,
+    renderCell: (params) => (
+      <ActionButtons
+        userId={params.row.id}
+        isBlocked={params.row.isBlocked}
+        isFlagged={params.row.flaggedByAdmin}
+      />
+    ),
+  },
 ];
 
 const UserManagement = () => {
@@ -59,6 +73,8 @@ const UserManagement = () => {
           ...i,
           id: i._id,
           avatar: transformImage(i.avatar, 50),
+          isBlocked: i.isBlocked,
+          flaggedByAdmin: i.flaggedByAdmin,
         }))
       );
     }
