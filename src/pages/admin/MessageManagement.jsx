@@ -93,8 +93,6 @@ const MessageManagement = () => {
     ) : (
       <div className="p-4">
   <div className="bg-white p-6 rounded shadow relative" style={{ minHeight: "700px" }}>
-    {/* Heading */}
-    <h2 className="text-2xl font-bold text-center mb-6">ALL MESSAGES</h2>
 
     {/* Table */}
     <div className="pb-24"> {/* give padding bottom to avoid search box overlap */}
