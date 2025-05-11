@@ -65,26 +65,60 @@ const UserManagement = () => {
   const { data, isLoading, error } = useAllUsersQuery(); // ✅ NEW
 
   const [rows, setRows] = useState([]);
+  const [filterStatus, setFilterStatus] = useState("");
+
 
   useEffect(() => {
-    if (data) {
-      setRows(
-        data.users.map((i) => ({
-          ...i,
-          id: i._id,
-          avatar: transformImage(i.avatar, 50),
-          isBlocked: i.isBlocked,
-          flaggedByAdmin: i.flaggedByAdmin,
-        }))
+  if (data) {
+    let allUsers = data.users.map((i) => ({
+      ...i,
+      id: i._id,
+      avatar: transformImage(i.avatar, 50),
+      isBlocked: i.isBlocked,
+      flaggedByAdmin: i.flaggedByAdmin,
+    }));
+
+    let filteredUsers = allUsers;
+
+    if (filterStatus === "flagged") {
+      filteredUsers = allUsers.filter((user) => user.flaggedByAdmin);
+    } else if (filterStatus === "blocked") {
+      filteredUsers = allUsers.filter((user) => user.isBlocked);
+    } else if (filterStatus === "active") {
+      filteredUsers = allUsers.filter(
+        (user) => !user.isBlocked && !user.flaggedByAdmin
       );
     }
-  }, [data]);
+
+    setRows(filteredUsers);
+  }
+}, [data, filterStatus]);
+
 
   if (isLoading) return <Skeleton height={"100vh"} />;
   if (error) return <div>Error loading users</div>;
 
   return (
     <AdminLayout>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+  <select
+    value={filterStatus}
+    onChange={(e) => setFilterStatus(e.target.value)}
+    style={{
+      padding: "10px 15px",
+      fontSize: "16px",
+      borderRadius: "6px",
+      border: "1px solid #ccc",
+      outline: "none",
+    }}
+  >
+    <option value="">All</option>
+    <option value="flagged">Flagged</option>
+    <option value="blocked">Blocked</option>
+    <option value="active">Active</option>
+  </select>
+</div>
+
       <Table heading={"All Users"} columns={columns} rows={rows} />
     </AdminLayout>
   );
