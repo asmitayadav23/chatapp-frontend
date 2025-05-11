@@ -105,13 +105,27 @@ const MessageManagement = () => {
     </div>
 
     {/* Search Box */}
-   <input
+  <input
   type="text"
   placeholder="Search messages..."
   value={searchTerm}
   onChange={(e) => setSearchTerm(e.target.value)}
-  className="absolute bottom-6 right-6 w-[28rem] px-6 py-4 text-xl text-black placeholder-black border border-gray-300 rounded-xl shadow-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+  style={{
+    position: "absolute",
+    bottom: "24px",
+    right: "24px",
+    width: "450px",
+    padding: "16px 24px",
+    fontSize: "18px",
+    color: "#000",
+    backgroundColor: "#fff",
+    border: "1px solid #ccc",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    outline: "none",
+  }}
 />
+
 
   </div>
 </div>
