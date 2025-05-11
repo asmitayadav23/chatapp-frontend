@@ -21,6 +21,17 @@ const Profile = ({ user }) => {
           border: "5px solid white",
         }}
       />
+
+      {user?.flaggedByAdmin && (
+      <Typography
+        variant="body2"
+        color="warning.main"
+        sx={{ fontWeight: "bold", textAlign: "center" }}
+      >
+        ⚠️ This user has been flagged by the admin.
+      </Typography>
+    )}
+
       <ProfileCard heading={"Bio"} text={user?.bio} />
       <ProfileCard
         heading={"Username"}
