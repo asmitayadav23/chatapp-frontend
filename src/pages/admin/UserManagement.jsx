@@ -100,16 +100,22 @@ const UserManagement = () => {
 
   return (
     <AdminLayout>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "10px", marginBottom: "1rem" }}>
+  <label style={{ fontWeight: "bold", fontSize: "16px" }}>Filter by Status:</label>
+  
   <select
     value={filterStatus}
     onChange={(e) => setFilterStatus(e.target.value)}
     style={{
-      padding: "10px 15px",
+      padding: "10px 20px",
       fontSize: "16px",
-      borderRadius: "6px",
-      border: "1px solid #ccc",
-      outline: "none",
+      borderRadius: "8px",
+      border: "2px solid #1976d2",
+      backgroundColor: "#f5faff",
+      color: "#1976d2",
+      fontWeight: "600",
+      cursor: "pointer",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
     }}
   >
     <option value="">All</option>
@@ -118,7 +124,6 @@ const UserManagement = () => {
     <option value="active">Active</option>
   </select>
 </div>
-
       <Table heading={"All Users"} columns={columns} rows={rows} />
     </AdminLayout>
   );
