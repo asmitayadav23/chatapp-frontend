@@ -105,13 +105,14 @@ const MessageManagement = () => {
     </div>
 
     {/* Search Box */}
-    <input
-      type="text"
-      placeholder="Search messages..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="absolute bottom-6 right-6 w-96 px-5 py-3 text-lg border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white z-20"
-    />
+   <input
+  type="text"
+  placeholder="Search messages..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="absolute bottom-6 right-6 w-[28rem] px-6 py-4 text-xl text-black placeholder-black border border-gray-300 rounded-xl shadow-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+/>
+
   </div>
 </div>
 
