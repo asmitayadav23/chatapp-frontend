@@ -92,17 +92,18 @@ return (
       <Skeleton height={"100vh"} />
     ) : (
       <div className="p-4">
-        <div className="flex justify-between items-center mb-4">
-  <h2 className="text-2xl font-bold">All Messages</h2>
+        <div className="relative mb-4">
+  <h2 className="text-2xl font-bold text-center">ALL MESSAGES</h2>
 
   <input
     type="text"
-    placeholder="Search messages by keyword"
+    placeholder="Keyword you want to search"
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
-    className="border px-3 py-2 rounded w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    className="absolute right-0 top-0 border px-3 py-2 rounded w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
   />
 </div>
+
 
 <Table
   columns={columns}
