@@ -28,7 +28,7 @@ const Profile = ({ user }) => {
         color="warning.main"
         sx={{ fontWeight: "bold", textAlign: "center" }}
       >
-        ⚠️ This user has been flagged by the admin.
+        ⚠️ You have been flagged by the admin.
       </Typography>
     )}
 
