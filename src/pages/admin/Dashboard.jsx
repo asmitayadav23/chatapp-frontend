@@ -128,8 +128,7 @@ const Dashboard = () => {
                 Last Messages
               </Typography>
 
-              <LineChart value={Array.isArray(stats?.messagesChart) ? stats.messagesChart : []} />
-
+              <LineChart value={stats?.messagesChart || []} />
             </Paper>
 
             <Paper
@@ -146,13 +145,12 @@ const Dashboard = () => {
               }}
             >
               <DoughnutChart
-            labels={["Single Chats", "Group Chats"]}
-            value={[
-            (stats?.totalChatsCount ?? 0) - (stats?.groupsCount ?? 0),
-            stats?.groupsCount ?? 0,
-      ]}
-/>
-
+                labels={["Single Chats", "Group Chats"]}
+                value={[
+                  stats?.totalChatsCount - stats?.groupsCount || 0,
+                  stats?.groupsCount || 0,
+                ]}
+              />
 
               <Stack
                 position={"absolute"}
